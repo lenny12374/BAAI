@@ -1,0 +1,46 @@
+# Daftar produk contoh, tiap produk adalah dict dengan nama, kategori, dan harga
+products = [
+    {"name": "Laptop", "category": "Electronics", "price": 1500},
+    {"name": "Jeans", "category": "Clothing", "price": 80},
+    {"name": "Smartphone", "category": "Electronics", "price": 700},
+    {"name": "Book", "category": "Books", "price": 40},
+    {"name": "Designer Jacket", "category": "Clothing", "price": 1200},
+]
+
+def calculate_discount(product):
+    discount = 0
+    if product["category"] == "Electronics":
+        discount += 0.10  # 10%
+    if product["price"] > 1000:
+        discount += 0.20  # 20%
+    if product["category"] == "Clothing":
+        discount += 0.05  # 5%
+    return discount
+
+def apply_discount(product):
+    discount_rate = calculate_discount(product)
+    discount_amount = product["price"] * discount_rate
+    final_price = product["price"] - discount_amount
+    return final_price, discount_amount
+
+def main():
+    print("Product Discount Summary")
+    print("="*30)
+    total_before = 0
+    total_discount = 0
+    total_after = 0
+
+    for p in products:
+        total_before += p["price"]
+        final_price, discount = apply_discount(p)
+        total_discount += discount
+        total_after += final_price
+        print(f"{p['name']} ({p['category']}): Original Price = ${p['price']:.2f}, Discount = ${discount:.2f}, Final Price = ${final_price:.2f}")
+
+    print("="*30)
+    print(f"Total Price Before Discount: ${total_before:.2f}")
+    print(f"Total Discount Given:       ${total_discount:.2f}")
+    print(f"Total Price After Discount:  ${total_after:.2f}")
+
+if __name__ == "__main__":
+    main()
