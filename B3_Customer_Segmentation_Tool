@@ -1,0 +1,58 @@
+import pandas as pd
+import os
+
+# Baca file Excel
+df = pd.read_excel("D:/Users/User/Desktop/Customer_Segmentation_Tool.xlsx")
+
+# Pastikan kolom ada
+required = {"Customer_Name", "Total_Purchases", "Number_of_Orders"}
+if not required.issubset(df.columns):
+    raise ValueError(f"Kolom wajib: {required}, tapi file berisi {set(df.columns)}")
+
+# Klasifikasi pelanggan
+vip_customers = []
+regular_customers = []
+new_customers = []
+
+total_vip_revenue = 0
+
+for _, row in df.iterrows():
+    name = row["Customer_Name"]
+    total = float(row["Total_Purchases"])
+    orders = int(row["Number_of_Orders"])
+    avg_order = total / orders if orders > 0 else 0
+
+    if total >= 10000:
+        category = "VIP"
+        total_vip_revenue += total
+        vip_customers.append((name, total, orders, avg_order))
+    elif total >= 5000:
+        category = "Regular"
+        regular_customers.append((name, total, orders, avg_order))
+    else:
+        category = "New"
+        new_customers.append((name, total, orders, avg_order))
+
+# Cetak laporan
+print("CUSTOMER SEGMENTATION REPORT")
+print("-" * 40)
+
+if vip_customers:
+    print("VIP Customers:")
+    for c in vip_customers:
+        print(f"{c[0]} | Total: ${c[1]:,.0f} | Orders: {c[2]} | Avg Order: ${c[3]:,.2f}")
+    print()
+
+if regular_customers:
+    print("Regular Customers:")
+    for c in regular_customers:
+        print(f"{c[0]} | Total: ${c[1]:,.0f} | Orders: {c[2]} | Avg Order: ${c[3]:,.2f}")
+    print()
+
+if new_customers:
+    print("New Customers:")
+    for c in new_customers:
+        print(f"{c[0]} | Total: ${c[1]:,.0f} | Orders: {c[2]} | Avg Order: ${c[3]:,.2f}")
+    print()
+
+print(f"Total VIP Revenue: ${total_vip_revenue:,.0f}")
